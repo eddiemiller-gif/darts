@@ -1,0 +1,3 @@
+const fs=require('fs'),{JSDOM}=require('jsdom'),assert=require('assert');
+const d=new JSDOM(fs.readFileSync('VFW Darts League Desk.html','utf8'),{url:'file:///local/VFW.html',runScripts:'dangerously',beforeParse(w){w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder}});
+setTimeout(()=>{try{assert.equal(d.window.document.querySelectorAll('#tabs button').length,7);const bytes=d.window.patchWorkbook(Uint8Array.from(Buffer.from(d.window.eval('workbookBytes'),'base64')),{});assert(bytes.length>100000);console.log('PASS: standalone local website loads all seven tabs and creates an Excel export without network access.')}finally{d.window.close()}},50);
